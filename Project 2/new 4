@@ -1,0 +1,71 @@
+def theta_join(relation1, relation2, predicate):
+    Result = collections.namedtuple('Result', next(iter(relation1))._fields)
+    Result1 = collections.namedtuple('Result1', next(iter(relation2))._fields)
+    Result2 = collections.namedtuple('Result2', Result._fields+Result1._fields)
+    resultSet = set()
+    for tuple in relation1:
+        for tuple1 in relation2:
+            tuple2=tuple+tuple1
+            if (predicate(tuple,tuple1)):
+                resultSet.add(Result2(*tuple2))
+    return resultSet
+
+def Cross(relation, relation1):
+    Result = collections.namedtuple('Result', next(iter(relation))._fields)
+	Result2 = collections.namedtuple('Result', next(iter(relation1))._fields)
+    Result1 = collections.namedtuple('Result1', Result._fields+Result2._fields)
+    resultSet = set()
+    for tuple in relation:
+        for tuple1 in relation1:
+            tuple2=tuple1 +tuple
+            resultSet.add(Result1(*tuple2));
+    return resultSet
+from Chinook_Python import *
+import collections
+import pprint
+
+def select(relation, predicate):
+    Result = collections.namedtuple('Result', next(iter(relation))._fields)
+    resultSet = set()
+    for tuple in relation:
+        if bool(predicate(tuple)):
+            resultSet.add(Result(*tuple))
+    return resultSet
+
+def project(relation, columns):
+    Result = collections.namedtuple('Result', columns)
+    resultSet = set()
+    for result in relation:
+        attrValueList = []
+        for attr in columns:
+            attrValueList.append(getattr(result, attr))
+        resultSet.add(Result(*attrValueList))
+    return resultSet
+	
+def rename(relation, new_columns=None, new_relation=None):
+    Result1 = collections.namedtuple('Result1',new_columns)
+    i=[]
+    for n in relation:
+        i.append(Result1(*n))
+    return 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

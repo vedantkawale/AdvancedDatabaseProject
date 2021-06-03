@@ -1,0 +1,124 @@
+1.
+
+DES-RA> project Album.Title (select Album.ArtistId=Artist.ArtistId and Artist.Name like '%Red Hot Chili Peppers%' (Album product Artist))
+
+
+answer(Album.AlbumId:int,Album.Title:varchar(160),Album.ArtistId:int,Artist.ArtistId:int,Artist.Name:varchar(120)) ->
+{
+  answer(193,'Blood Sugar Sex Magik',127,127,'Red Hot Chili Peppers'),
+  answer(194,'By The Way',127,127,'Red Hot Chili Peppers'),
+  answer(195,'Californication',127,127,'Red Hot Chili Peppers')
+}
+Info: 3 tuples computed.       
+
+2.
+DES> Project Genre.Name (select Artist.Name='U2' (Genre zjoin Genre.GenreId=Track.GenreId Track zjoin Track.AlbumId=Album.AlbumId Album zjoin Album.ArtistId=Artist.ArtistId Artist))
+
+answer(Genre.Name:varchar(120)) ->          
+{
+  answer('Pop'),
+  answer('Rock')
+}
+Info: 2 tuples computed.          
+
+
+
+3.
+
+DES> project Album.Title,Artist.Name,Track.Name(select Playlist.Name='Grunge' (Artist zjoin Artist.ArtistId=Album.ArtistId Album zjoin Album.AlbumId=Track.AlbumId Track zjoin Track.TrackId=PlaylistTrack.TrackId PlaylistTrack zjoin PlaylistTrack.PlaylistId=Playlist.PlaylistId Playlist))
+
+answer(Album.Title:varchar(160),Artist.Name:varchar(120),Track.Name:varchar(200)) ->
+{
+  answer('A-Sides','Soundgarden','Black Hole Sun'),
+  answer('A-Sides','Soundgarden','Outshined'),
+  answer('Core','Stone Temple Pilots','Plush'),
+  answer('Facelift','Alice In Chains','Man In The Box'),
+  answer('Nevermind','Nirvana','Come As You Are'),
+  answer('Nevermind','Nirvana','Drain You'),
+  answer('Nevermind','Nirvana','In Bloom'),
+  answer('Nevermind','Nirvana','Lithium'),
+  answer('Nevermind','Nirvana','On A Plain'),
+  answer('Nevermind','Nirvana','Smells Like Teen Spirit'),
+  answer('Temple of the Dog','Temple of the Dog','Hunger Strike'),
+  answer('Ten','Pearl Jam','Alive'),
+  answer('Ten','Pearl Jam','Evenflow'),
+  answer('Ten','Pearl Jam','Jeremy'),
+  answer('Vs.','Pearl Jam','Daughter')
+}
+Info: 15 tuples computed.   
+
+4.
+DES-RA> project Customer.FirstName,Customer.LastName,Customer.Email (Select Playlist.Name='TV Shows'(Customer zjoin Customer.CustomerId=Invoice.CustomerId Invoice zjoin Invoice.InvoiceId=InvoiceLine.InvoiceId InvoiceLine zjoin InvoiceLine.TrackId=PlaylistTrack.TrackId PlaylistTrack zjoin PlaylistTrack.PlaylistId=Playlist.PlaylistId Playlist ))
+
+answer(Customer.FirstName:varchar(40),Customer.LastName:varchar(20),Customer.Email:varchar(60)) ->
+{
+  answer('Astrid','Gruber','astrid.gruber@apple.at'),
+  answer('BjÃ¸rn','Hansen','bjorn.hansen@yahoo.no'),
+  answer('Camille','Bernard','camille.bernard@yahoo.fr'),
+  answer('Dan','Miller','dmiller@comcast.com'),
+  answer('Dominique','Lefebvre','dominiquelefebvre@gmail.com'),
+  answer('Frank','Ralston','fralston@gmail.com'),
+  answer('FrantiÅ¡ek','WichterlovÃ¡','frantisekw@jetbrains.com'),
+  answer('FranÃ§ois','Tremblay','ftremblay@gmail.com'),
+  answer('Fynn','Zimmermann','fzimmermann@yahoo.de'),
+  answer('Heather','Leacock','hleacock@gmail.com'),
+  answer('Helena','HolÃ½','hholy@gmail.com'),
+  answer('Hugh','O\'Reilly','hughoreilly@apple.ie'),
+  answer('Isabelle','Mercier','isabelle_mercier@apple.fr'),
+  answer('Jack','Smith','jacksmith@microsoft.com'),
+  answer('Jennifer','Peterson','jenniferp@rogers.ca'),
+  answer('Joakim','Johansson','joakim.johansson@yahoo.se'),
+  answer('Johannes','Van der Berg','johavanderberg@yahoo.nl'),
+  answer('JoÃ£o','Fernandes','jfernandes@yahoo.pt'),
+  answer('Julia','Barnett','jubarnett@gmail.com'),
+  answer('Ladislav','KovÃ¡cs','ladislav_kovacs@apple.hu'),
+  answer('Luis','Rojas','luisrojas@yahoo.cl'),
+  answer('LuÃ­s','GonÃ§alves','luisg@embraer.com.br'),
+  answer('Manoj','Pareek','manoj.pareek@rediff.com'),
+  answer('Puja','Srivastava','puja_srivastava@yahoo.in'),
+  answer('Richard','Cunningham','ricunningham@hotmail.com'),
+  answer('Terhi','HÃ¤mÃ¤lÃ¤inen','terhi.hamalainen@apple.fi'),
+  answer('Tim','Goyer','tgoyer@apple.com'),
+  answer('Victor','Stevens','vstevens@yahoo.com'),
+  answer('Wyatt','Girard','wyatt.girard@yahoo.fr')
+}
+Info: 29 tuples computed.  
+
+5.
+
+DES-RA> project Employee.FirstName,Employee.LastName,Employee.Email (Select MediaType.Name = 'Purchased AAC audio file'(Employee zjoin Employee.EmployeeId=Customer.SupportRepId Customer zjoin Customer.CustomerId=Invoice.CustomerId Invoice zjoin Invoice.InvoiceId=InvoiceLine.InvoiceId InvoiceLine zjoin InvoiceLine.TrackId=Track.TrackId Track zjoin Track.MediaTypeId=MediaType.MediaTypeId MediaType ))
+
+answer(Employee.FirstName:varchar(20),Employee.LastName:varchar(20),Employee.Email:varchar(60)) ->
+{
+  answer('Margaret','Park','margaret@chinookcorp.com'),
+  answer('Steve','Johnson','steve@chinookcorp.com')
+}
+Info: 2 tuples computed. 
+
+
+
+
+
+
+
+
+
+
+
+select Genre.GenreId=track.GenreId and track.AlbumId=Album.AlbumId and Album.ArtistId=Artist.ArtistId and Artist.Name='U2' (Genre product track product Album product Artist)
+
+select * from Genre where GenreId in (Select GenreId from Track where AlbumId in (Select AlbumId from Album where ArtistId in (Select ArtistId from Artist where Name = 'U2' ) ))
+
+Project Genre.Name (select Artist.Name='U2' (Genre zjoin Genre.GenreId=Track.GenreId Track zjoin Track.AlbumId=Album.AlbumId Album zjoin Album.ArtistId=Artist.ArtistId Artist))
+
+
+project Name 
+(project GenreId (Project GenreId (   (Track))) 
+(Genre))
+
+
+project Name (Select GenreId like (select GenreId (Select GenreId=25 (Track))) (Genre))
+
+(project Name (Genre)) Product (project Name  (Genre Product Genre.GenreId=Track.GenreId Track Product Track.AlbumId=Album.AlbumId Album Product Album.ArtistId=Artist.ArtistId Artist Artist.Name='U2'))
+
+project Artist.name (select Album.ArtistId=Artist.ArtistId and Artist.Name like '%Red Hot Chili Peppers%' (Album product Artist))

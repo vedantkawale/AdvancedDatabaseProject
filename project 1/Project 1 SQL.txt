@@ -1,0 +1,117 @@
+﻿1.
+DES> select * from Album where ArtistId in (select ArtistId from Artist where Name like '%Red Hot Chili Peppers%')
+
+Warning: [Sem] Unnecessary DISTINCT because of primary key in [Artist].
+answer(Album.AlbumId:int,Album.Title:varchar(160),Album.ArtistId:int) ->
+{
+  answer(193,'Blood Sugar Sex Magik',127),
+  answer(194,'By The Way',127),
+  answer(195,'Californication',127)
+}
+Info: 3 tuples computed.  
+
+
+
+2.        
+
+DES> select * from Genre where GenreId in (Select GenreId from Track where AlbumId in (Select AlbumId from Album where ArtistId in (Select ArtistId from Artist where Name = 'U2' ) ))
+
+Warning: [Sem] Unnecessary DISTINCT because of primary key in [Album].
+Warning: [Sem] Unnecessary DISTINCT because of primary key in [Artist].
+answer(Genre.GenreId:int,Genre.Name:varchar(120)) ->
+{
+  answer(1,'Rock'),
+  answer(9,'Pop')
+}
+Info: 2 tuples computed.          
+
+
+3.
+
+DES> Select al.Title, ar.Name, tr.Name from Album al inner join Artist ar inner join Track tr on ar.ArtistId=al.ArtistId and al.AlbumId=tr.AlbumId where TrackId in (Select TrackId from PlaylistTrack where PlaylistId in (Select PlaylistId from Playlist where Name = 'Grunge'))
+
+Warning: [Sem] Unnecessary DISTINCT because of primary key in [Playlist].
+answer(al.Title:varchar(160),ar.Name:varchar(120),tr.Name:varchar(200)) ->
+{
+  answer('A-Sides','Soundgarden','Black Hole Sun'),
+  answer('A-Sides','Soundgarden','Outshined'),
+  answer('Core','Stone Temple Pilots','Plush'),
+  answer('Facelift','Alice In Chains','Man In The Box'),
+  answer('Nevermind','Nirvana','Come As You Are'),
+  answer('Nevermind','Nirvana','Drain You'),
+  answer('Nevermind','Nirvana','In Bloom'),
+  answer('Nevermind','Nirvana','Lithium'),
+  answer('Nevermind','Nirvana','On A Plain'),
+  answer('Nevermind','Nirvana','Smells Like Teen Spirit'),
+  answer('Temple of the Dog','Temple of the Dog','Hunger Strike'),
+  answer('Ten','Pearl Jam','Alive'),
+  answer('Ten','Pearl Jam','Evenflow'),
+  answer('Ten','Pearl Jam','Jeremy'),
+  answer('Vs.','Pearl Jam','Daughter')
+}
+Info: 15 tuples computed.         
+
+
+4.a
+
+DES> select FirstName,LastName,Email from Customer where CustomerId in (Select CustomerId from Invoice where InvoiceId in (Select InvoiceId from InvoiceLine where TrackId in (Select TrackId from PlaylistTrack where PlaylistId in (Select PlaylistId from Playlist where Name = 'TV Shows'))))
+
+b.
+
+DES> select ci.FirstName,ci.LastName,ci.Email from Customer ci inner join Invoice inv ON inv.CustomerId=ci.CustomerId inner join InvoiceLine il On il.InvoiceId=inv.InvoiceId inner join PlaylistTrack pt On pt.TrackId=il.TrackId inner join Playlist pl ON pl.PlaylistId=pt.PlaylistId where pl.Name = 'TV Shows' 
+
+answer(ci.FirstName:varchar(40),ci.LastName:varchar(20),ci.Email:varchar(60)) ->
+{
+  answer('Astrid','Gruber','astrid.gruber@apple.at'),
+  answer('Bjørn','Hansen','bjorn.hansen@yahoo.no'),
+  answer('Camille','Bernard','camille.bernard@yahoo.fr'),
+  answer('Dan','Miller','dmiller@comcast.com'),
+  answer('Dominique','Lefebvre','dominiquelefebvre@gmail.com'),
+  answer('Frank','Ralston','fralston@gmail.com'),
+  answer('František','Wichterlová','frantisekw@jetbrains.com'),
+  answer('François','Tremblay','ftremblay@gmail.com'),
+  answer('Fynn','Zimmermann','fzimmermann@yahoo.de'),
+  answer('Heather','Leacock','hleacock@gmail.com'),
+  answer('Helena','Holý','hholy@gmail.com'),
+  answer('Hugh','O\'Reilly','hughoreilly@apple.ie'),
+  answer('Isabelle','Mercier','isabelle_mercier@apple.fr'),
+  answer('Jack','Smith','jacksmith@microsoft.com'),
+  answer('Jennifer','Peterson','jenniferp@rogers.ca'),
+  answer('Joakim','Johansson','joakim.johansson@yahoo.se'),
+  answer('Johannes','Van der Berg','johavanderberg@yahoo.nl'),
+  answer('João','Fernandes','jfernandes@yahoo.pt'),
+  answer('Julia','Barnett','jubarnett@gmail.com'),
+  answer('Ladislav','Kovács','ladislav_kovacs@apple.hu'),
+  answer('Luis','Rojas','luisrojas@yahoo.cl'),
+  answer('Luís','Gonçalves','luisg@embraer.com.br'),
+  answer('Manoj','Pareek','manoj.pareek@rediff.com'),
+  answer('Puja','Srivastava','puja_srivastava@yahoo.in'),
+  answer('Richard','Cunningham','ricunningham@hotmail.com'),
+  answer('Terhi','Hämäläinen','terhi.hamalainen@apple.fi'),
+  answer('Tim','Goyer','tgoyer@apple.com'),
+  answer('Victor','Stevens','vstevens@yahoo.com'),
+  answer('Wyatt','Girard','wyatt.girard@yahoo.fr')
+}
+Info: 29 tuples computed.   
+5.
+
+
+DES> select FirstName,LastName,Email from Employee where EmployeeId in (select SupportRepId from Customer where CustomerId in (Select CustomerId from Invoice where InvoiceId in (Select InvoiceId from InvoiceLine where TrackId in (Select TrackId from Track where MediaTypeId in (Select MediaTypeId from MediaType where Name = 'Purchased AAC audio file')))))
+
+Warning: [Sem] Unnecessary DISTINCT because of primary key in [Track].
+Warning: [Sem] Unnecessary DISTINCT because of primary key in [MediaType].
+answer(Employee.FirstName:varchar(20),Employee.LastName:varchar(20),Employee.Email:varchar(60)) ->
+{
+  answer('Margaret','Park','margaret@chinookcorp.com'),
+  answer('Steve','Johnson','steve@chinookcorp.com')
+}
+Info: 2 tuples computed.          
+
+
+
+
+
+
+
+
+

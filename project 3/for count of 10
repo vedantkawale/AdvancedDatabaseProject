@@ -1,0 +1,33 @@
+from struct import *
+
+person_format = '20c20c70c40c80c25ciii12c25c50c50c'
+def  dbinterface(count) :
+
+    with open('small.bin', 'rb') as f:
+        list_tuples=[]
+
+        # Reads chunks from 1 block of dataa
+        for tuple_count in range(count) :
+            k=0
+            tuple=[]
+            buffer = f.read(405)
+            unpacked = unpack(person_format,buffer)
+            unpacked_list = list(unpacked)
+            for i in range(len(unpacked_list)):
+                if type(unpacked_list[i]) == bytes:
+                    unpacked_list[i] = unpacked_list[i].rstrip(b'\x00').decode()
+            list_divison=[20,20,70,40,80,25,1,1,1,12,25,50,50]
+            for i in range(len(list_divison)):
+                str1=[]
+                str2=[]
+                for j in range(list_divison[i]):
+                    str1.append(unpacked_list[j+k])
+                if list_divison[i]==1 :
+                    str2=str1[0]
+                else :
+                    str2 = ''.join(str1)
+                    str2=str2.rstrip()
+                k=list_divison[i]+k;
+                tuple.append(str2)
+            list_tuples.append(tuple)
+        return(list_tuples)

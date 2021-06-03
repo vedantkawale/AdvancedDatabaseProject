@@ -1,0 +1,63 @@
+
+
+2.
+DES-TRC> {S.Name|'Genre'(S) and (Exists T)('Track'(T) and S.GenreId=T.GenreId and (Exists Al)('Album'(Al) and T.AlbumId=Al.AlbumId and (Exists Ar)('Artist'(Ar) and Al.ArtistId=Ar.ArtistId and Ar.Name='U2' )))}
+
+answer(name:varchar(120)) ->                
+{
+  answer('Pop'),
+  answer('Rock')
+}
+Info: 2 tuples computed. 
+
+
+4.
+DES-TRC> {C.FirstName,C.LastName,C.Email | 'Customer'(C) and (EXISTS I) ('Invoice' (I) and C.CustomerId=I.CustomerId and (Exists IL)('InvoiceLine'(IL) and I.InvoiceId=IL.InvoiceId and (Exists PT)('PlaylistTrack'(PT) and IL.TrackId=PT.TrackId and(Exists PL)('Playlist'(PL) and PT.PlaylistId=PL.PlaylistId and PL.Name='TV Shows')) )) }
+
+answer(firstName:varchar(40),lastName:varchar(20),email:varchar(60)) ->
+{
+  answer('Astrid','Gruber','astrid.gruber@apple.at'),
+  answer('BjÃ¸rn','Hansen','bjorn.hansen@yahoo.no'),
+  answer('Camille','Bernard','camille.bernard@yahoo.fr'),
+  answer('Dan','Miller','dmiller@comcast.com'),
+  answer('Dominique','Lefebvre','dominiquelefebvre@gmail.com'),
+  answer('Frank','Ralston','fralston@gmail.com'),
+  answer('FrantiÅ¡ek','WichterlovÃ¡','frantisekw@jetbrains.com'),
+  answer('FranÃ§ois','Tremblay','ftremblay@gmail.com'),
+  answer('Fynn','Zimmermann','fzimmermann@yahoo.de'),
+  answer('Heather','Leacock','hleacock@gmail.com'),
+  answer('Helena','HolÃ½','hholy@gmail.com'),
+  answer('Hugh','O\'Reilly','hughoreilly@apple.ie'),
+  answer('Isabelle','Mercier','isabelle_mercier@apple.fr'),
+  answer('Jack','Smith','jacksmith@microsoft.com'),
+  answer('Jennifer','Peterson','jenniferp@rogers.ca'),
+  answer('Joakim','Johansson','joakim.johansson@yahoo.se'),
+  answer('Johannes','Van der Berg','johavanderberg@yahoo.nl'),
+  answer('JoÃ£o','Fernandes','jfernandes@yahoo.pt'),
+  answer('Julia','Barnett','jubarnett@gmail.com'),
+  answer('Ladislav','KovÃ¡cs','ladislav_kovacs@apple.hu'),
+  answer('Luis','Rojas','luisrojas@yahoo.cl'),
+  answer('LuÃ­s','GonÃ§alves','luisg@embraer.com.br'),
+  answer('Manoj','Pareek','manoj.pareek@rediff.com'),
+  answer('Puja','Srivastava','puja_srivastava@yahoo.in'),
+  answer('Richard','Cunningham','ricunningham@hotmail.com'),
+  answer('Terhi','HÃ¤mÃ¤lÃ¤inen','terhi.hamalainen@apple.fi'),
+  answer('Tim','Goyer','tgoyer@apple.com'),
+  answer('Victor','Stevens','vstevens@yahoo.com'),
+  answer('Wyatt','Girard','wyatt.girard@yahoo.fr')
+}
+Info: 29 tuples computed.
+
+
+5.
+DES-TRC> { E.FirstName,E.LastName,E.Email | 'Employee'(E) and (EXISTS C)('Customer'(C) and E.EmployeeId=C.SupportRepId and (EXISTS I)('Invoice'(I) and C.CustomerId=I.CustomerId and (EXISTS IL)('InvoiceLine'(IL) and I.InvoiceId=IL.InvoiceId and (EXISTS T)('Track'(T) and IL.TrackId=T.TrackId and (EXISTS MT)('MediaType'(MT)and T.MediaTypeId=MT.MediaTypeId and MT.Name= 'Purchased AAC audio file')))))}
+
+answer(firstName:varchar(20),lastName:varchar(20),email:varchar(60)) ->
+{
+  answer('Margaret','Park','margaret@chinookcorp.com'),
+  answer('Steve','Johnson','steve@chinookcorp.com')
+}
+Info: 2 tuples computed.          
+
+
+

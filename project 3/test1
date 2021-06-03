@@ -1,0 +1,4 @@
+with open("small.bin", "rb") as f:
+    bytearr=bytearray(f.read())
+    bit=bytearr.decode("utf-8",errors="ignore")
+    print(bit)

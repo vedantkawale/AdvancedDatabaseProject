@@ -1,0 +1,80 @@
+from struct import *
+from datetime import date
+def  dbinterface(age) : 
+    person_format = '20c20c70c40c80c25ciii12c25c50c50c'
+    today = date.today() 
+    with open('large.bin', 'rb') as f:
+        list_tuples=[]
+        blf=10
+        list_divison=[20,20,70,40,80,25,1,1,1,12,25,50,50]
+        buffer = f.read(405)
+        while  buffer:
+            k=0
+            tuple=[]
+            # Read block of data
+            #buffer = f.read(405)
+            #unpack data using given format
+            unpacked = unpack(person_format,buffer)
+            unpacked_list = list(unpacked)
+            # replace null character with space
+            for i in range(len(unpacked_list)):
+                if type(unpacked_list[i]) == bytes:
+                    unpacked_list[i] = unpacked_list[i].rstrip(b'\x00').decode()
+            #convert character list in string
+            for i in range(len(list_divison)):
+                str1=[]
+                str2=''
+                for j in range(list_divison[i]):
+                    str1.append(unpacked_list[j+k])
+                if list_divison[i]==1 :
+                    str2=str1[0]
+                else :
+                    str2 = (''.join(str1)).rstrip()
+                k+=list_divison[i];
+                tuple.append(str2)
+            if age >=(today.year - tuple[8] -((today.month, today.day) <(tuple[7], tuple[6]))):
+                list_tuples.append(tuple)
+            blf=blf-1
+            if blf==0 :
+                blf=10
+                f.read(46) 
+            buffer = f.read(405)    
+    return(list_tuples)
+
+def  dbinterface(age) : 
+    person_format = '20c20c70c40c80c25ciii12c25c50c50c'
+    today = date.today() 
+    with open('large.bin', 'rb') as f:
+        list_tuples=[]
+        blf=10
+        list_divison=[20,20,70,40,80,25,1,1,1,12,25,50,50]
+        list_divison1=[20,20,215,1,1,1,12]
+        buffer = f.read(405)
+        while  buffer:
+            k=0
+            tuple=[]
+            unpacked = unpack(person_format,buffer)
+            unpacked_list = list(unpacked)
+            for i in range(len(list_divison1)):   
+                str1=[]
+                str2=''
+                if i!=2 :
+                    for j in range(list_divison1[i]):
+                    
+                            if type(unpacked_list[j+k]) == bytes:
+                                unpacked_list[j+k] = unpacked_list[j+k].rstrip(b'\x00').decode()
+                            str1.append(unpacked_list[j+k])
+                            if list_divison1[i]==1 :
+                                str2=str(str1[0])
+                            else :
+                                str2 = (''.join(str1)).rstrip()
+                    tuple.append(str2)
+                k+=list_divison1[i];
+            if age >=(today.year - int(tuple[4]) -((today.month, today.day) <(int(tuple[3]), int(tuple[2])))):
+                list_tuples.append(tuple)
+            blf=blf-1
+            if blf==0 :
+                blf=10
+                f.read(46) 
+            buffer=f.read(405)
+        return(list_tuples)

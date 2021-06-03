@@ -1,0 +1,99 @@
+1.
+DES> {Title | (Exists ArtistId)('Album'( _,Title ,ArtistId) and 'Artist'(ArtistId,'Red Hot Chili Peppers'))}
+
+answer(title:varchar(160)) ->               
+{
+  answer('Blood Sugar Sex Magik'),
+  answer('By The Way'),
+  answer('Californication')
+}
+Info: 3 tuples computed.          
+
+2.
+{Name | (Exists GenreId)('Genre'(GenreId,Name) and (Exists AlbumId)('Track'( _,_,AlbumId,_,GenreId,_,_,_,_) and (Exists ArtistId)('Album'( AlbumId,_,ArtistId) and 'Artist'(ArtistId,'U2') )))}
+
+DES> {Name | (Exists GenreId,AlbumId,ArtistId)('Genre'(GenreId,Name) and 'Track'( _,_,AlbumId,_,GenreId,_,_,_,_) and 'Album'( AlbumId,_,ArtistId) and 'Artist'(ArtistId,'U2'))}
+
+answer(name:varchar(120)) ->                
+{
+  answer('Pop'),
+  answer('Rock')
+}
+Info: 2 tuples computed.          
+
+
+3.
+DES> {Name,Title,Nam| (exists ArtistId,AlbumId,TrackId)('Artist'(ArtistId,Name) and 'Album'(AlbumId,Title,ArtistId ) and 'Track'( TrackId,Nam,AlbumId,_,_,_,_,_,_) and(exists PlaylistId)('PlaylistTrack'(PlaylistId,TrackId) and 'Playlist'(PlaylistId,'Grunge') ))}
+
+answer(name:varchar(120),title:varchar(160),nam:varchar(200)) ->
+{
+  answer('Alice In Chains','Facelift','Man In The Box'),
+  answer('Nirvana','Nevermind','Come As You Are'),
+  answer('Nirvana','Nevermind','Drain You'),
+  answer('Nirvana','Nevermind','In Bloom'),
+  answer('Nirvana','Nevermind','Lithium'),
+  answer('Nirvana','Nevermind','On A Plain'),
+  answer('Nirvana','Nevermind','Smells Like Teen Spirit'),
+  answer('Pearl Jam','Ten','Alive'),
+  answer('Pearl Jam','Ten','Evenflow'),
+  answer('Pearl Jam','Ten','Jeremy'),
+  answer('Pearl Jam','Vs.','Daughter'),
+  answer('Soundgarden','A-Sides','Black Hole Sun'),
+  answer('Soundgarden','A-Sides','Outshined'),
+  answer('Stone Temple Pilots','Core','Plush'),
+  answer('Temple of the Dog','Temple of the Dog','Hunger Strike')
+}
+Info: 15 tuples computed.          
+
+
+
+4.
+
+DES> {FirstName,LastName,Email | (Exists CustomerId,InvoiceId,TrackId,PlaylistId)('Customer'(CustomerId,FirstName,LastName,_,_,_,_,_,_,_,_,Email,_) and 'Invoice'(InvoiceId,CustomerId,_,_,_,_,_,_,_) and 'InvoiceLine'(_,InvoiceId,TrackId,_,_) and 'PlaylistTrack'(PlaylistId,TrackId) and 'Playlist'(PlaylistId,'TV Shows') ) }
+
+answer(firstName:varchar(40),lastName:varchar(20),email:varchar(60)) ->
+{
+  answer('Astrid','Gruber','astrid.gruber@apple.at'),
+  answer('BjÃ¸rn','Hansen','bjorn.hansen@yahoo.no'),
+  answer('Camille','Bernard','camille.bernard@yahoo.fr'),
+  answer('Dan','Miller','dmiller@comcast.com'),
+  answer('Dominique','Lefebvre','dominiquelefebvre@gmail.com'),
+  answer('Frank','Ralston','fralston@gmail.com'),
+  answer('FrantiÅ¡ek','WichterlovÃ¡','frantisekw@jetbrains.com'),
+  answer('FranÃ§ois','Tremblay','ftremblay@gmail.com'),
+  answer('Fynn','Zimmermann','fzimmermann@yahoo.de'),
+  answer('Heather','Leacock','hleacock@gmail.com'),
+  answer('Helena','HolÃ½','hholy@gmail.com'),
+  answer('Hugh','O\'Reilly','hughoreilly@apple.ie'),
+  answer('Isabelle','Mercier','isabelle_mercier@apple.fr'),
+  answer('Jack','Smith','jacksmith@microsoft.com'),
+  answer('Jennifer','Peterson','jenniferp@rogers.ca'),
+  answer('Joakim','Johansson','joakim.johansson@yahoo.se'),
+  answer('Johannes','Van der Berg','johavanderberg@yahoo.nl'),
+  answer('JoÃ£o','Fernandes','jfernandes@yahoo.pt'),
+  answer('Julia','Barnett','jubarnett@gmail.com'),
+  answer('Ladislav','KovÃ¡cs','ladislav_kovacs@apple.hu'),
+  answer('Luis','Rojas','luisrojas@yahoo.cl'),
+  answer('LuÃ­s','GonÃ§alves','luisg@embraer.com.br'),
+  answer('Manoj','Pareek','manoj.pareek@rediff.com'),
+  answer('Puja','Srivastava','puja_srivastava@yahoo.in'),
+  answer('Richard','Cunningham','ricunningham@hotmail.com'),
+  answer('Terhi','HÃ¤mÃ¤lÃ¤inen','terhi.hamalainen@apple.fi'),
+  answer('Tim','Goyer','tgoyer@apple.com'),
+  answer('Victor','Stevens','vstevens@yahoo.com'),
+  answer('Wyatt','Girard','wyatt.girard@yahoo.fr')
+}
+Info: 29 tuples computed.  
+
+
+5.
+DES> {FirstName,LastName,Email | (Exists EmployeeId)('Employee'(EmployeeId,LastName,FirstName,_,_,_,_,_,_,_,_,_,_,_,Email) and (Exists CustomerId)('Customer'(CustomerId,_,_,_,_,_,_,_,_,_,_,_,EmployeeId) and (Exists InvoiceId)('Invoice'(InvoiceId,CustomerId,_,_,_,_,_,_,_) and (Exists TrackId)('InvoiceLine'(_,InvoiceId,TrackId,_,_) and (Exists MediaTypeId)('Track'(TrackId,_,_,MediaTypeId,_,_,_,_,_) and ('MediaType'(MediaTypeId,'Purchased AAC audio file')))))))}
+
+answer(firstName:varchar(20),lastName:varchar(20),email:varchar(60)) ->
+{
+  answer('Margaret','Park','margaret@chinookcorp.com'),
+  answer('Steve','Johnson','steve@chinookcorp.com')
+}
+Info: 2 tuples computed.
+
+
